@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Podcast Divide — Why podcasts thrive in the U.S. but stay niche in China</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=DM+Sans:wght@300;400;500&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --cream:#F5F0E8;
+  --black:#1a1a1a;
+  --yellow:#FFD84D;
+  --blue:#2255CC;
+  --red:#E8352A;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);color:var(--black);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none;}
+
+/* CURSOR */
+.cursor{position:fixed;width:12px;height:12px;background:var(--black);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .15s;top:0;left:0;}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid var(--black);border-radius:50%;pointer-events:none;z-index:9998;top:0;left:0;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:20px 48px;mix-blend-mode:multiply;background:transparent;}
+.nav-logo{font-family:'Special Elite',serif;font-size:15px;letter-spacing:.12em;}
+.nav-links{display:flex;gap:28px;}
+.nav-links a{font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--black);position:relative;cursor:none;}
+.nav-links a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1px;background:var(--black);transition:width .3s;}
+.nav-links a:hover::after{width:100%;}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:100px 48px 60px;}
+.hero-bg-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Special Elite',serif;font-size:clamp(80px,16vw,200px);color:rgba(0,0,0,0.04);white-space:nowrap;pointer-events:none;user-select:none;letter-spacing:-.02em;}
+
+/* STICKERS */
+.sticker{position:absolute;pointer-events:none;}
+.sticker-circle{width:180px;height:180px;background:var(--yellow);border-radius:50%;top:8%;right:12%;opacity:.9;animation:float1 6s ease-in-out infinite;}
+.sticker-rect{width:120px;height:160px;background:var(--blue);bottom:12%;left:8%;opacity:.85;transform:rotate(-8deg);animation:float2 7s ease-in-out infinite;}
+.sticker-dot{width:60px;height:60px;background:var(--red);border-radius:50%;top:20%;left:15%;animation:float3 5s ease-in-out infinite;}
+.sticker-line{position:absolute;top:65%;right:20%;width:2px;height:120px;background:var(--black);transform:rotate(25deg);animation:float1 8s ease-in-out infinite;}
+.sticker-squiggle{position:absolute;top:30%;right:30%;font-family:'Caveat',cursive;font-size:28px;color:var(--black);transform:rotate(-15deg);animation:float2 9s ease-in-out infinite;opacity:.6;}
+@keyframes float1{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-18px) rotate(3deg)}}
+@keyframes float2{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-12px) rotate(-5deg)}}
+@keyframes float3{0%,100%{transform:translateY(0)}50%{transform:translateY(-22px)}}
+
+/* HERO CONTENT */
+.hero-content{position:relative;z-index:2;max-width:900px;width:100%;}
+.hero-tag{display:inline-block;font-family:'Caveat',cursive;font-size:18px;background:var(--yellow);padding:4px 14px;margin-bottom:24px;transform:rotate(-1.5deg);}
+.hero-h1{font-family:'Special Elite',serif;font-size:clamp(36px,7vw,88px);line-height:1.05;letter-spacing:-.02em;margin-bottom:28px;}
+.hero-h1 .line2{display:block;color:var(--blue);}
+.hero-h1 .line3{position:relative;display:inline-block;}
+.hero-h1 .line3::after{content:'';position:absolute;bottom:4px;left:0;right:0;height:6px;background:var(--red);z-index:-1;opacity:.6;}
+.hero-sub{font-size:16px;line-height:1.75;max-width:480px;color:#444;margin-bottom:40px;}
+.hero-by{font-family:'Caveat',cursive;font-size:17px;color:#888;}
+
+/* SCROLL INDICATOR */
+.scroll-ind{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#999;}
+.scroll-line{width:1px;height:48px;background:#999;animation:scrollAnim 2s ease-in-out infinite;}
+@keyframes scrollAnim{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* STATS */
+#stats{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--black);}
+.stat-block{padding:48px 36px;background:var(--cream);position:relative;overflow:hidden;cursor:default;transition:background .3s;}
+.stat-block:hover{background:var(--yellow);}
+.stat-n{font-family:'Special Elite',serif;font-size:clamp(40px,5vw,72px);display:block;line-height:1;margin-bottom:12px;}
+.stat-l{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#666;line-height:1.5;}
+.stat-block:nth-child(1) .stat-n{color:var(--black);}
+.stat-block:nth-child(2) .stat-n{color:var(--blue);}
+.stat-block:nth-child(3) .stat-n{color:var(--red);}
+
+/* SHARED SECTION */
+section{padding:100px 48px;}
+.section-label{font-family:'Caveat',cursive;font-size:16px;color:#999;display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.section-label::before{content:'';display:block;width:32px;height:1px;background:#999;}
+.section-h2{font-family:'Special Elite',serif;font-size:clamp(28px,4vw,52px);line-height:1.1;margin-bottom:32px;letter-spacing:-.01em;}
+
+/* REGULATION */
+#regulation{background:var(--black);color:var(--cream);}
+#regulation .section-label{color:#555;}
+#regulation .section-label::before{background:#555;}
+.reg-layout{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+.reg-body p{font-size:15px;line-height:1.85;color:#ccc;margin-bottom:16px;}
+.tape{background:var(--yellow);padding:2px 8px;color:var(--black);font-family:'Caveat',cursive;font-size:13px;transform:rotate(.5deg);display:inline-block;margin-bottom:8px;}
+.quote-card{background:#111;border:1px solid #333;padding:28px;position:relative;margin-top:8px;}
+.quote-card::before{content:'\201C';font-family:'Special Elite',serif;font-size:80px;color:#333;position:absolute;top:-20px;left:16px;line-height:1;}
+.quote-card p{font-family:'Caveat',cursive;font-size:17px;line-height:1.65;color:#eee;padding-top:20px;}
+.quote-card cite{display:block;font-size:11px;letter-spacing:.08em;color:#555;margin-top:12px;font-style:normal;}
+.num-callout{display:flex;flex-direction:column;gap:24px;margin-top:8px;}
+.num-item{display:flex;align-items:flex-start;gap:16px;padding-bottom:24px;border-bottom:1px solid #222;}
+.num-item:last-child{border:none;}
+.num-big{font-family:'Special Elite',serif;font-size:48px;color:var(--yellow);line-height:1;min-width:80px;}
+.num-text{font-size:13px;color:#999;line-height:1.65;padding-top:8px;}
+
+/* AUDIENCE */
+#audience{background:var(--cream);}
+.aud-layout{display:grid;grid-template-columns:5fr 4fr;gap:64px;align-items:start;}
+.aud-layout p{font-size:15px;line-height:1.85;color:#444;margin-bottom:16px;}
+.compare-block{display:flex;flex-direction:column;gap:20px;margin-top:8px;}
+.cmp-row{display:flex;flex-direction:column;gap:6px;}
+.cmp-label-main{font-size:12px;font-weight:500;margin-bottom:6px;letter-spacing:.04em;color:#333;}
+.cmp-bars{display:flex;flex-direction:column;gap:4px;}
+.bar-row{display:flex;align-items:center;gap:10px;}
+.bar-flag{font-size:14px;min-width:20px;}
+.bar-track{flex:1;height:8px;background:#e8e4dc;overflow:hidden;}
+.bar-fill{height:100%;transition:width 1.4s cubic-bezier(.25,1,.5,1);width:0%;}
+.fill-us{background:var(--black);}
+.fill-cn{background:#aaa;}
+.bar-pct{font-family:'Special Elite',serif;font-size:13px;min-width:36px;text-align:right;color:#333;}
+.bar-pct.muted{color:#aaa;}
+.insight-box{background:var(--black);color:var(--cream);padding:32px;margin-top:8px;position:relative;}
+.insight-box::before{content:'insight';font-family:'Caveat',cursive;font-size:13px;color:#555;position:absolute;top:12px;right:16px;letter-spacing:.08em;}
+.insight-box p{font-size:14px;line-height:1.8;color:#ccc;}
+.counter-box{background:#f0ebe0;padding:28px;margin-top:20px;}
+.counter-box .big{font-family:'Special Elite',serif;font-size:26px;line-height:1.2;margin-bottom:10px;}
+.counter-box .big em{font-style:normal;color:var(--blue);}
+.counter-box .small{font-size:13px;line-height:1.7;color:#666;}
+
+/* BUSINESS */
+#business{background:var(--yellow);}
+#business .section-label{color:#8a7000;}
+#business .section-label::before{background:#8a7000;}
+.biz-layout{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+.biz-body p{font-size:15px;line-height:1.85;color:#1a1a1a;margin-bottom:16px;}
+.chart-wrap{position:relative;height:260px;margin-bottom:24px;}
+.biz-quote{background:var(--black);color:var(--cream);padding:24px;}
+.biz-quote p{font-family:'Caveat',cursive;font-size:17px;line-height:1.6;}
+.biz-quote cite{font-size:11px;color:#666;display:block;margin-top:8px;font-style:normal;letter-spacing:.06em;}
+.revenue-callout{background:var(--black);padding:24px;margin-top:16px;}
+.revenue-callout .big{font-family:'Special Elite',serif;font-size:22px;color:var(--yellow);line-height:1.3;margin-bottom:6px;}
+.revenue-callout .sub{font-size:13px;color:#555;}
+.revenue-callout .source{font-size:11px;color:#444;margin-top:8px;letter-spacing:.06em;}
+
+/* PERSONAL */
+#personal{background:var(--blue);color:white;}
+#personal .section-label{color:rgba(255,255,255,.35);}
+#personal .section-label::before{background:rgba(255,255,255,.25);}
+.personal-layout{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+.personal-body p{font-size:15px;line-height:1.85;color:rgba(255,255,255,.8);margin-bottom:16px;}
+.big-letter{font-family:'Special Elite',serif;font-size:clamp(80px,14vw,200px);line-height:.85;color:rgba(255,255,255,.07);pointer-events:none;user-select:none;letter-spacing:-.04em;text-align:center;}
+
+/* SUMMARY */
+#summary{background:var(--cream);}
+.factors{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--black);margin-top:48px;}
+.fcard{background:var(--cream);padding:40px 28px;position:relative;overflow:hidden;transition:background .3s;cursor:default;}
+.fcard:hover{background:var(--yellow);}
+.fcard-num{font-family:'Special Elite',serif;font-size:72px;color:rgba(0,0,0,.05);position:absolute;top:-10px;right:12px;line-height:1;}
+.fcard-title{font-family:'Special Elite',serif;font-size:20px;margin-bottom:12px;position:relative;}
+.fcard-desc{font-size:13px;line-height:1.7;color:#666;position:relative;}
+
+/* SOURCES */
+#sources{background:var(--black);color:var(--cream);padding:80px 48px;}
+#sources h3{font-family:'Special Elite',serif;font-size:28px;margin-bottom:40px;}
+.source-list{display:flex;flex-direction:column;}
+.source-item{padding:20px 0;border-bottom:1px solid #222;font-size:13px;color:#888;line-height:1.7;display:flex;gap:24px;align-items:baseline;}
+.source-item:last-child{border:none;}
+.source-n{font-family:'Special Elite',serif;font-size:11px;color:#444;min-width:24px;}
+
+/* FOOTER */
+footer{background:var(--black);color:#444;padding:32px 48px;display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.1em;text-transform:uppercase;border-top:1px solid #222;}
+
+/* ANIMATIONS */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:none;}
+.reveal-left{opacity:0;transform:translateX(-32px);transition:opacity .8s ease,transform .8s ease;}
+.reveal-left.visible{opacity:1;transform:none;}
+.reveal-right{opacity:0;transform:translateX(32px);transition:opacity .8s ease,transform .8s ease;}
+.reveal-right.visible{opacity:1;transform:none;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:16px 20px;}
+  .nav-links{gap:16px;}
+  #hero{padding:80px 20px 60px;}
+  #stats{grid-template-columns:1fr;}
+  section{padding:60px 20px;}
+  .reg-layout,.aud-layout,.biz-layout,.personal-layout{grid-template-columns:1fr;gap:32px;}
+  .factors{grid-template-columns:1fr;}
+  #sources{padding:60px 20px;}
+  footer{padding:24px 20px;flex-direction:column;gap:8px;text-align:center;}
+  body{cursor:auto;}
+  .cursor,.cursor-ring{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">PODCAST DIVIDE</span>
+  <div class="nav-links">
+    <a href="#regulation">Regulation</a>
+    <a href="#audience">Audience</a>
+    <a href="#business">Business</a>
+    <a href="#personal">Reflection</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-text">PODCAST</div>
+  <div class="sticker sticker-circle" aria-hidden="true"></div>
+  <div class="sticker sticker-rect" aria-hidden="true"></div>
+  <div class="sticker sticker-dot" aria-hidden="true"></div>
+  <div class="sticker sticker-line" aria-hidden="true"></div>
+  <div class="sticker sticker-squiggle" aria-hidden="true">why?</div>
+
+  <div class="hero-content">
+    <div class="hero-tag">✦ A Comparative Media Study</div>
+    <h1 class="hero-h1">
+      Why podcasts<br>
+      <span class="line2">thrive in the U.S.</span>
+      but stay <span class="line3">niche</span> in China
+    </h1>
+    <p class="hero-sub">Podcasts generated $1.9 billion in U.S. advertising revenue in 2023. In China, the same medium barely reaches beyond a small, educated elite. Three forces explain the divide — regulation, culture, and money.</p>
+    <p class="hero-by">Scroll to explore ↓</p>
+
+  </div>
+
+  <div class="scroll-ind" aria-hidden="true">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- STATS -->
+<div id="stats" role="region" aria-label="Key statistics">
+  <div class="stat-block reveal">
+    <span class="stat-n">$1.9B</span>
+    <span class="stat-l">U.S. podcast advertising revenue in 2023 (IAB, 2024)</span>
+  </div>
+  <div class="stat-block reveal">
+    <span class="stat-n">11,783</span>
+    <span class="stat-l">Apps blocked from Apple's China App Store as of May 2023</span>
+  </div>
+  <div class="stat-block reveal">
+    <span class="stat-n">30.2</span>
+    <span class="stat-l">Average age of a Chinese podcast listener — elite, educated, urban</span>
+  </div>
+</div>
+
+<!-- REGULATION -->
+<section id="regulation">
+  <div class="section-label">Barrier 01</div>
+  <h2 class="section-h2 reveal">The Regulation Wall</h2>
+  <div class="reg-layout">
+    <div class="reg-body reveal-left">
+      <span class="tape">Freedom House, 2023</span>
+      <p>China has been ranked the world's worst abuser of internet freedom for nine consecutive years. In 2022, the National Radio and Television Administration (NRAT) issued sweeping regulations targeting podcast hosts, live streamers, and all online content producers.</p>
+      <p>Any content that "weakens, distorts, or denies the leadership of the CCP" is banned outright. Private media outlets cannot obtain news service licenses, placing political, economic, military, and diplomatic topics entirely off-limits for independent podcasters.</p>
+      <p>The chilling effect is measurable. Popular film critic and podcaster Bo Mi had an episode removed in November 2022 for criticizing censorship. Creators navigate constant self-censorship, carving out "informal spaces" to discuss public issues — never head-on.</p>
+      <div class="quote-card">
+        <p>"Private media without news service licenses are prohibited from conducting traditional 'hard news' reporting on political, economic, military, diplomatic, and other public affairs."</p>
+        <cite>— Meng &amp; Wang, Digital Journalism, 2025, p. 4</cite>
+      </div>
+    </div>
+    <div class="num-callout reveal-right">
+      <div class="num-item">
+        <span class="num-big">9×</span>
+        <span class="num-text">Consecutive years China ranked worst internet freedom abuser globally (Freedom House, 2023)</span>
+      </div>
+      <div class="num-item">
+        <span class="num-big">11K+</span>
+        <span class="num-text">Apps blocked from China's Apple App Store by May 2023, including many podcast platforms</span>
+      </div>
+      <div class="num-item">
+        <span class="num-big">0</span>
+        <span class="num-text">Private media outlets permitted to report on political, economic, or military affairs independently</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCE -->
+<section id="audience">
+  <div class="section-label">Barrier 02</div>
+  <h2 class="section-h2 reveal">Who Is Actually Listening?</h2>
+  <div class="aud-layout">
+    <div class="reveal-left">
+      <p>Douyin (TikTok) and Kuaishou dominate Chinese media with instant, algorithm-driven short videos. Podcasts demand the opposite — 15 to 20 minutes of sustained attention before you even know if you enjoy a show. Meng and Wang call this the "counter-algorithm" problem.</p>
+      <p>In the U.S., podcast listeners span every generation. In China, they are concentrated among a narrow elite — young, highly educated, and living in top-tier cities like Beijing, Shanghai, and Guangzhou.</p>
+
+      <div class="compare-block" role="img" aria-label="Bar chart comparing U.S. vs China podcast listener percentages by generation. Millennials: U.S. 50% vs China niche. Gen Z: U.S. 30% vs China minimal. Gen Alpha: U.S. 23% vs China rare. Boomers: U.S. 13% vs China rare.">
+        <div class="cmp-row">
+          <div class="cmp-label-main">Millennials — weekly podcast listeners</div>
+          <div class="cmp-bars">
+            <div class="bar-row">
+              <span class="bar-flag">🇺🇸</span>
+              <div class="bar-track"><div class="bar-fill fill-us" id="m-us"></div></div>
+              <span class="bar-pct">50%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-flag">🇨🇳</span>
+              <div class="bar-track"><div class="bar-fill fill-cn" id="m-cn"></div></div>
+              <span class="bar-pct muted">niche</span>
+            </div>
+          </div>
+        </div>
+        <div class="cmp-row">
+          <div class="cmp-label-main">Gen Z — weekly podcast listeners</div>
+          <div class="cmp-bars">
+            <div class="bar-row">
+              <span class="bar-flag">🇺🇸</span>
+              <div class="bar-track"><div class="bar-fill fill-us" id="z-us"></div></div>
+              <span class="bar-pct">30%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-flag">🇨🇳</span>
+              <div class="bar-track"><div class="bar-fill fill-cn" id="z-cn"></div></div>
+              <span class="bar-pct muted">minimal</span>
+            </div>
+          </div>
+        </div>
+        <div class="cmp-row">
+          <div class="cmp-label-main">Gen Alpha — weekly podcast listeners</div>
+          <div class="cmp-bars">
+            <div class="bar-row">
+              <span class="bar-flag">🇺🇸</span>
+              <div class="bar-track"><div class="bar-fill fill-us" id="a-us"></div></div>
+              <span class="bar-pct">23%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-flag">🇨🇳</span>
+              <div class="bar-track"><div class="bar-fill fill-cn" id="a-cn"></div></div>
+              <span class="bar-pct muted">rare</span>
+            </div>
+          </div>
+        </div>
+        <div class="cmp-row">
+          <div class="cmp-label-main">Boomers — weekly podcast listeners</div>
+          <div class="cmp-bars">
+            <div class="bar-row">
+              <span class="bar-flag">🇺🇸</span>
+              <div class="bar-track"><div class="bar-fill fill-us" id="b-us"></div></div>
+              <span class="bar-pct">13%</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-flag">🇨🇳</span>
+              <div class="bar-track"><div class="bar-fill fill-cn" id="b-cn"></div></div>
+              <span class="bar-pct muted">rare</span>
+            </div>
+          </div>
+        </div>
+        <p style="font-size:11px;color:#aaa;margin-top:4px;letter-spacing:.04em;">Source: Edison Research, Infinite Dial 2023; Meng &amp; Wang, 2025</p>
+      </div>
+    </div>
+
+    <div class="reveal-right" style="display:flex;flex-direction:column;gap:20px;padding-top:60px;">
+      <div class="insight-box">
+        <p>"The majority of Chinese podcast listeners are relatively young, well educated, with relatively high incomes and living in top-tier or coastal cities such as Beijing, Shanghai and Guangzhou."</p>
+        <cite style="display:block;font-size:11px;color:#555;margin-top:10px;font-style:normal;letter-spacing:.06em;">— Meng &amp; Wang, 2025, p. 16</cite>
+      </div>
+      <div class="counter-box">
+        <p class="big">Podcasting is a <em>counter-algorithm</em> format</p>
+        <p class="small">Unlike TikTok's 15-second videos, a podcast demands 15–20 minutes before the listener decides if they like it. In China's short-video-first culture, that barrier is almost impossible to cross for most users.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUSINESS -->
+<section id="business">
+  <div class="section-label">Barrier 03</div>
+  <h2 class="section-h2 reveal">An Immature Business Model</h2>
+  <div class="biz-layout">
+    <div class="reveal-left">
+      <div class="chart-wrap">
+        <canvas id="revenueChart"
+          role="img"
+          aria-label="Bar chart: U.S. podcast advertising revenue is $1.9 billion in 2023. China's podcast advertising revenue is negligible at approximately $0.04 billion. The U.S. bar is dramatically taller.">
+          U.S. podcast ad revenue: $1.9 billion. China: approximately $0.04 billion (2023).
+        </canvas>
+      </div>
+      <div class="biz-quote">
+        <p>"I bet 99% of general podcasts do not receive any business orders."</p>
+        <cite>— Chinese podcast host, Meng &amp; Wang, 2025, p. 10</cite>
+      </div>
+    </div>
+    <div class="biz-body reveal-right">
+      <p>In the West, podcast listeners subscribe to individual shows — creators build stable, loyal paying audiences. In China, users subscribe to <em>platforms</em> rather than programs. This single habit difference makes it nearly impossible for independent creators to monetize their work.</p>
+      <p>With a small and homogeneous listener base, Chinese podcasts struggle to attract advertisers. Most hosts rely entirely on ad revenue — but since so few podcasts have sufficient reach, only the most popular shows earn anything meaningful.</p>
+      <p>The circular trap: no audience → no ads → no investment in quality → no audience growth. Meanwhile, the U.S. podcast ad market reached $1.9 billion in 2023, supported by a diverse audience spanning every demographic.</p>
+      <div class="revenue-callout">
+        <p class="big">U.S. $1.9B vs. China ≈ $0</p>
+        <p class="sub">Podcast advertising revenue, 2023</p>
+        <p class="source">Source: IAB, 2024</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONAL -->
+<section id="personal">
+  <div class="section-label">A Personal Reflection</div>
+  <div class="personal-layout">
+    <div class="reveal-left">
+      <h2 class="section-h2" style="color:white;">Living Between Two Worlds</h2>
+      <div class="personal-body">
+        <p>As a Chinese student currently studying at the University of Minnesota, I have lived both sides of this divide firsthand. Growing up in China, podcasts existed — but they were invisible to most people around me. Nobody in my everyday life talked about their favorite show.</p>
+        <p>Now, in Minneapolis, podcasts are everywhere. Friends recommend episodes over lunch. Professors assign them. Strangers wear earbuds on the bus, listening to something slow, thoughtful, and long.</p>
+        <p>This contrast is what made this research question personal, not just academic. The three barriers I identified — regulation, audience habits, and business models — are the specific reasons why, growing up, I never heard anyone say: <em style="color:#FFD84D;">"You have to listen to this podcast."</em></p>
+      </div>
+    </div>
+    <div class="big-letter reveal-right" aria-hidden="true">CN<br>→<br>US</div>
+  </div>
+</section>
+
+<!-- SUMMARY -->
+<section id="summary">
+  <div class="section-label">Summary</div>
+  <h2 class="section-h2 reveal">Three Barriers, One Niche</h2>
+  <div class="factors">
+    <div class="fcard">
+      <div class="fcard-num" aria-hidden="true">01</div>
+      <div class="fcard-title">Government Regulation</div>
+      <p class="fcard-desc">NRAT regulations ban politically sensitive content. Private media cannot obtain news licenses. A pervasive chilling effect shapes what podcasters dare to discuss — before censors even intervene.</p>
+    </div>
+    <div class="fcard">
+      <div class="fcard-num" aria-hidden="true">02</div>
+      <div class="fcard-title">Audience Limitation</div>
+      <p class="fcard-desc">Short-video platforms dominate Chinese media consumption. Podcasts are a "counter-algorithm" format — too slow for most users. Listenership is confined to a small, highly educated, urban elite.</p>
+    </div>
+    <div class="fcard">
+      <div class="fcard-num" aria-hidden="true">03</div>
+      <div class="fcard-title">Business Model Gap</div>
+      <p class="fcard-desc">Chinese users subscribe to platforms, not shows. Advertisers stay away from tiny audiences. 99% of podcasts earn zero revenue — a circular trap that prevents the medium from growing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOURCES -->
+<section id="sources">
+  <h3>Sources</h3>
+  <div class="source-list">
+    <div class="source-item">
+      <span class="source-n">01</span>
+      <span>Freedom House. (2023). <em>Freedom on the Net 2023: China.</em> Freedom House. https://freedomhouse.org/country/china/freedom-net/2023</span>
+    </div>
+    <div class="source-item">
+      <span class="source-n">02</span>
+      <span>Meng, B., &amp; Wang, X. (2025). Navigating the regulatory landscape: Chinese podcast journalism in an authoritarian context. <em>Digital Journalism.</em></span>
+    </div>
+    <div class="source-item">
+      <span class="source-n">03</span>
+      <span>Soto, G. (2023, August 30). Generations and podcast listening: Highlights from Podcast Movement 2023. <em>Edison Research at SSRS.</em></span>
+    </div>
+    <div class="source-item">
+      <span class="source-n">04</span>
+      <span>Interactive Advertising Bureau. (2024). <em>U.S. Podcast Advertising Revenue Study.</em> IAB.</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Podcast Divide</span>
+  <span>2025</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+// CUSTOM CURSOR
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0, my=0, rx=0, ry=0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = (mx - 6) + 'px';
+  cur.style.top  = (my - 6) + 'px';
+});
+function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = (rx - 18) + 'px';
+  ring.style.top  = (ry - 18) + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+
+// SCROLL REVEAL
+const barsAnimated = {done: false};
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, {threshold: 0.15});
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => obs.observe(el));
+
+// BAR CHART ANIMATION — trigger when audience section enters view
+const audObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !barsAnimated.done) {
+      barsAnimated.done = true;
+      setTimeout(() => {
+        document.getElementById('m-us').style.width = '50%';
+        document.getElementById('m-cn').style.width = '6%';
+        document.getElementById('z-us').style.width = '30%';
+        document.getElementById('z-cn').style.width = '3%';
+        document.getElementById('a-us').style.width = '23%';
+        document.getElementById('a-cn').style.width = '2%';
+        document.getElementById('b-us').style.width = '13%';
+        document.getElementById('b-cn').style.width = '2%';
+      }, 300);
+    }
+  });
+}, {threshold: 0.2});
+
+const audSection = document.getElementById('audience');
+if (audSection) audObs.observe(audSection);
+
+// STAGGERED STAT REVEALS
+document.querySelectorAll('.stat-block').forEach((el, i) => {
+  el.style.transitionDelay = (i * 0.12) + 's';
+  obs.observe(el);
+});
+
+// REVENUE CHART
+new Chart(document.getElementById('revenueChart'), {
+  type: 'bar',
+  data: {
+    labels: ['🇺🇸 United States', '🇨🇳 China'],
+    datasets: [{
+      label: 'Podcast Ad Revenue 2023 (USD billions)',
+      data: [1.9, 0.04],
+      backgroundColor: ['#1a1a1a', '#aaaaaa'],
+      borderWidth: 0,
+      borderRadius: 0
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {display: false},
+      tooltip: {
+        callbacks: {
+          label: c => '$' + c.parsed.y.toFixed(2) + 'B'
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {callback: v => '$' + v + 'B', color: '#333'},
+        grid: {color: 'rgba(0,0,0,0.08)'},
+        border: {color: 'rgba(0,0,0,0.15)'}
+      },
+      x: {
+        grid: {display: false},
+        ticks: {color: '#333'},
+        border: {color: 'rgba(0,0,0,0.15)'}
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
